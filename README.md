@@ -1,3 +1,7 @@
-using Authentication
-using google firebase for the backend
-will be handling the form signups
+#Netflix GPT
+
+- Create React App
+- Configure TailwindCSS
+- Header
+
+Login Form
