@@ -7,17 +7,32 @@ import { removeUser } from "../utils/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { onAuthStateChanged } from "firebase/auth";
+import { toggleGptSearchView } from "../utils/gptSlice";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {})
+      .catch((error) => {
+        navigate("/error");
+      });
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        const { uid, email, displayName } = user;
-        dispatch(addUser({ uid: uid, email: email, displayName: displayName }));
+        const { uid, email, displayName, photoURL } = user;
+        dispatch(
+          addUser({
+            uid: uid,
+            email: email,
+            displayName: displayName,
+            photoURL: photoURL,
+          })
+        );
         navigate("/browse");
       } else {
         dispatch(removeUser());
@@ -25,27 +40,30 @@ const Header = () => {
       }
     });
 
-    return () => {
-      unsubscribe();
-    };
+    // Unsiubscribe when component unmounts
+    return () => unsubscribe();
   }, []);
 
-  const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {})
-      .catch((error) => {
-        // An error happened.
-      });
+  const handleGptSearchClick = () => {
+    console.log("Button being clickec");
+    dispatch(toggleGptSearchView());
   };
+
   return (
-    <div className="w-screen absolute flex justify-between">
+    <div className="w-screen absolute px-8 py-2 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row justify-between">
       <img
-        className="w-44 px-8 py-2  bg-gradient-to-b from-black z-10"
+        className="w-44 px-8 py-2  x-auto md:mx-0"
         src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
         alt="logo"
       ></img>
       {user && (
         <div className="flex p-4">
+          <button
+            className="py-2 bg-purple-800 mx-4 -my-1 rounded-lg text-white px-4"
+            onClick={handleGptSearchClick}
+          >
+            GPT Search
+          </button>
           <img
             className="w-8 h-8"
             alt="usericon"
