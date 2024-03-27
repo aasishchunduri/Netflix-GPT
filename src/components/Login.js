@@ -10,6 +10,7 @@ import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { BG_IMG } from "../utils/constants";
 
 const Login = () => {
   const [isSignUpForm, setSignUpForm] = useState(true);
@@ -75,11 +76,7 @@ const Login = () => {
     <div>
       <Header />
       <div>
-        <img
-          className="absolute"
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/93da5c27-be66-427c-8b72-5cb39d275279/fa6f97d9-245e-43d7-bb56-af27cbf6d656/US-en-20240226-popsignuptwoweeks-perspective_alpha_website_large.jpg"
-          alt="logo"
-        />
+        <img className="absolute" src={BG_IMG} alt="logo" />
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}
